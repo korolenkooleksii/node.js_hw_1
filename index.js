@@ -1,4 +1,5 @@
 const argv = require("yargs").argv;
+require("colors");
 
 const {
   listContacts,
@@ -7,32 +8,40 @@ const {
   addContact,
 } = require("./contacts.js");
 
-const invokeAction = async ( {action, id, name, email, phone} ) => {
+const invokeAction = async ({ action, id, name, email, phone }) => {
   switch (action) {
-
     case "list":
       const contacts = await listContacts();
-      console.log("log ~ contacts🚀  => ", contacts);
+      console.log(" => contacts🚀 => ", contacts);
+      console.log(" => Request completed successfully!!!  =>".bgGreen);
 
       break;
 
     case "get":
       const contact = await getContactById(id);
-      if (null) throw new Error(`ID - ${id} not found!`);
-      console.log("log ~ contact🚀  => ", contact);
+      if (!contact) throw new Error(`ID - ${id} not found!`.bgRed);
+
+      console.log(
+        `Id: ${id} request completed successfully!!`.bgGreen,
+        contact
+      );
 
       break;
 
     case "add":
       const newContact = await addContact(name, email, phone);
-      console.log("log ~ newContact🚀  => ", newContact);
+      console.log(" => Contact added successfully!!!  =>".bgGreen, newContact);
 
       break;
 
     case "remove":
       const deleteContact = await removeContact(id);
-      if (null) throw new Error(`ID - ${id} not found!`);
-      console.log("log ~ removeContact🚀  => ", deleteContact);
+      if (!deleteContact) throw new Error(`ID - ${id} not found!`.bgRed);
+      
+      console.log(
+        `=> Contact with id: ${id} successfully deleted. =>`.bgGreen,
+        deleteContact
+      );
 
       break;
 
@@ -41,4 +50,4 @@ const invokeAction = async ( {action, id, name, email, phone} ) => {
   }
 };
 
-invokeAction(argv)
+invokeAction(argv);
